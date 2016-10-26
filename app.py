@@ -1,5 +1,5 @@
 #!flask/bin/python
-from flask import Flask, jsonify, redirect, url_for
+from flask import Flask, jsonify, redirect, url_for, request
 from pprint import pprint
 import json
 
@@ -24,22 +24,42 @@ app = Flask(__name__)
 #     }
 # ]
 
+
+
 with open('data_file.json') as data_file:
     data = json.load(data_file)
 
 # pprint(data)
 
-@app.route('/api', methods=['GET'])
-def get_tasks():
+countries = [x for x in data if x['GEO_TYPE'] == 'Countries and Groupings']
+# countries = [x for x in data if x['GEO_TYPE'] == 'Countries and Groupings']
+
+# Get all stats
+@app.route('/api/stats', methods=['GET'])
+def get_all_stats():
     return jsonify({'data': data})
 
-@app.route('/api/hello', methods=['GET'])
-def get_tasks2():
-    return "index.html"
+# Get all countries
+@app.route('/api/stats/countries', methods=['GET'])
+def get_countries():
+    return jsonify({'countries': countries})
+
+# Get label by label type
+@app.route('/api/stats/labels', methods=['GET'])
+def get_labels():
+    # Get user input
+    label = request.args.get('label')
+    labels = [x for x in data if x['GEO_LABEL'] == label]
+    return jsonify({'labels': labels})
 
 @app.route('/test')
 def get_tasks3():
-    return redirect(url_for('static', filename='webapp/src/routes/index.js'))
+    return redirect(url_for('static', filename='webapp/src/client/index.html'))
+
+# Run test
+@app.route('/api/hello', methods=['GET'])
+def get_tasks2():
+    return "Test"
 
 if __name__ == '__main__':
     app.run(debug=True)
