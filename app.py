@@ -5,61 +5,101 @@ import json
 
 app = Flask(__name__)
 
-# tasks = [
-#     {
-#         'id': 1,
-#         'title': u'Buy groceries',
-#         'description': u'Milk, Cheese, Pizza, Fruit, Tylenol',
-#         'done': False
-#     },
-#     {
-#         'id': 2,
-#         'title': u'Learn Python',
-#         'description': u'Need to find a good Python tutorial on the web',
-#         'done': False
-#     },
-#     {
-#         'id': 2,
-#         'done': False
-#     }
-# ]
-
-
-
 with open('data_file.json') as data_file:
     data = json.load(data_file)
 
-# pprint(data)
+# for letter in data:     # First Example
+#    for x in letter:
+#        print x
 
-countries = [x for x in data if x['GEO_TYPE'] == 'Countries and Groupings']
-# countries = [x for x in data if x['GEO_TYPE'] == 'Countries and Groupings']
+# my_list = []
+#
+# for x in data:
+#     if x['GEO_TYPE'] == 'Countries and Groupings':
+#         my_list.append(x)
+#
+# print my_list
+
 
 # Get all stats
 @app.route('/api/stats', methods=['GET'])
 def get_all_stats():
     return jsonify({'data': data})
 
-# Get all countries
-@app.route('/api/stats/countries', methods=['GET'])
+# Get by type id
+@app.route('/api/stats/geotype', methods=['GET'])
 def get_countries():
-    return jsonify({'countries': countries})
+    geo_type = request.args.get('geotype')
+    geo_type_data = [x for x in data if x['GEO_TYPE'] == geo_type]
+    return jsonify({'data': geo_type_data})
 
 # Get label by label type
 @app.route('/api/stats/labels', methods=['GET'])
 def get_labels():
-    # Get user input
     label = request.args.get('label')
     labels = [x for x in data if x['GEO_LABEL'] == label]
-    return jsonify({'labels': labels})
+    return jsonify({'data': labels})
 
-@app.route('/test')
-def get_tasks3():
+@app.route('/api/stats/averageByLabel', methods=['GET'])
+def average_label_type():
+
+    geo_type = request.args.get('geotype')
+
+    results = []
+    filtered_results = []
+
+    for x in data:
+        if x['GEO_TYPE'] == geo_type:
+            results.append(x)
+            print x
+
+    for y in results:
+
+        sum_25 = 0
+        sum_50 = 0
+        sum_75 = 0
+        sum_100 = 0
+
+        for x in range(0, 100):
+            if x >= 0 and x < 25:
+                sum_25 += y[str(x)]
+                print x
+
+            elif x >= 25 and x < 50:
+                sum_50 += y[str(x)]
+                print x
+
+            elif x >=50 and x < 75:
+                sum_75 += y[str(x)]
+                print x
+
+            else:
+                sum_100 += y[str(x)]
+                print x
+
+        tasks = {
+            'GEO_CODE': y['GEO_CODE'],
+            'GEO_LABEL': y['GEO_LABEL'],
+            'GEO_TYPE': y['GEO_TYPE'],
+            '0-24': sum_25,
+            '25-49': sum_50,
+            '50-74': sum_75,
+            '74-100': sum_100
+        }
+
+        filtered_results.append(tasks)
+
+        print y
+
+
+
+    return jsonify({'data': filtered_results})
+
+# Route to app.....
+@app.route('/app')
+def route_to_app():
     return redirect(url_for('static', filename='webapp/src/client/index.html'))
 
-# Run test
-@app.route('/api/hello', methods=['GET'])
-def get_tasks2():
-    return "Test"
 
 if __name__ == '__main__':
     app.run(debug=True)
