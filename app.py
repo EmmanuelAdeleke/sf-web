@@ -8,37 +8,33 @@ app = Flask(__name__)
 with open('data_file.json') as data_file:
     data = json.load(data_file)
 
-# for letter in data:     # First Example
-#    for x in letter:
-#        print x
-
-# my_list = []
-#
-# for x in data:
-#     if x['GEO_TYPE'] == 'Countries and Groupings':
-#         my_list.append(x)
-#
-# print my_list
-
-
 # Get all stats
 @app.route('/api/stats', methods=['GET'])
 def get_all_stats():
-    return jsonify({'data': data})
+    return jsonify({'values': data})
 
 # Get by type id
 @app.route('/api/stats/geotype', methods=['GET'])
 def get_countries():
     geo_type = request.args.get('geotype')
     geo_type_data = [x for x in data if x['GEO_TYPE'] == geo_type]
-    return jsonify({'data': geo_type_data})
+    return jsonify({'values': geo_type_data})
 
 # Get label by label type
 @app.route('/api/stats/labels', methods=['GET'])
 def get_labels():
     label = request.args.get('label')
-    labels = [x for x in data if x['GEO_LABEL'] == label]
-    return jsonify({'data': labels})
+    json_obj = [x for x in data if x['GEO_LABEL'] == label]
+    build_obj = []
+
+    for x in range(0, 100):
+        print x
+        # label = {"x": x, "y": json_obj[str(x)]}
+        label = {"x": x, "y": json_obj[0][str(x)]}
+
+        build_obj.append(label)
+
+    return jsonify({'values': build_obj})
 
 @app.route('/api/stats/averageByLabel', methods=['GET'])
 def average_label_type():
@@ -77,7 +73,7 @@ def average_label_type():
                 sum_100 += y[str(x)]
                 print x
 
-        tasks = {
+        value = {
             'GEO_CODE': y['GEO_CODE'],
             'GEO_LABEL': y['GEO_LABEL'],
             'GEO_TYPE': y['GEO_TYPE'],
@@ -87,13 +83,30 @@ def average_label_type():
             '74-100': sum_100
         }
 
-        filtered_results.append(tasks)
+        filtered_results.append(value)
 
-        print y
+    return jsonify({'values': filtered_results})
 
+@app.route('/api/stats/total', methods=['GET'])
+def total_in_label():
+    label = request.args.get('label')
+    value = [x for x in data if x['GEO_LABEL'] == label]
 
+    print value
 
-    return jsonify({'data': filtered_results})
+    sum = 0;
+
+    for x in range(1, 100):
+        sum += value[0][str(x)]
+
+    value = {
+        'GEO_CODE': value[0]['GEO_CODE'],
+        'GEO_LABEL': value[0]['GEO_LABEL'],
+        'GEO_TYPE': value[0]['GEO_TYPE'],
+        'total': sum
+    }
+
+    return jsonify(value)
 
 # Route to app.....
 @app.route('/app')
