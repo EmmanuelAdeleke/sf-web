@@ -1,4 +1,4 @@
-# sf-web
+# sf-web - Flask & ReactJS
 Simple application to check ages by area using static json file with pre-loaded data
 
 ## Sample code (1) - Get each of total ages
