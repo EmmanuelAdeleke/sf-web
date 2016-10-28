@@ -67,155 +67,6 @@
 	
 	var BarChart = _reactD2.default.BarChart;
 	
-	// var x = $.ajax({
-	//     url: "http://localhost:5000/api/stats/labels?label=London",
-	//     type: "GET",
-	//     success: function(data) {
-	//
-	//         console.log(this)
-	//
-	//         barData = data;
-	//
-	//     },
-	//     fail: function() {
-	//         console.log("Operation failed")
-	//     }
-	// });
-	
-	
-	// var BarChartComponent = React.createClass({
-	//
-	//     componentDidMount: function() {
-	//         $.ajax({
-	//             url: this.props.url,
-	//             type: "GET",
-	//             success: function(data) {
-	//                 this.setState({data: data})
-	//             }.bind(this),
-	//             fail: function() {
-	//                 console.log("Operation failed")
-	//             }
-	//         });
-	//
-	//     },
-	//
-	//     render: function() {
-	//
-	//         console.log(this)
-	//
-	//         return (
-	//             <BarChart width={500}
-	//                       height={200}
-	//                       data={barData}/>
-	//         )
-	//     }
-	// });
-	//
-	// var ContainerComponent = React.createClass({
-	//
-	//     getInitialState: function() {
-	//           return {
-	//               data: []
-	//           }
-	//     },
-	//
-	//     componentDidMount: function() {
-	//         $.ajax({
-	//             url: this.props.url,
-	//             type: "GET",
-	//             success: function(data) {
-	//                 this.setState({data: data})
-	//             }.bind(this),
-	//             fail: function() {
-	//                 console.log("Operation failed")
-	//             }
-	//         });
-	//
-	//     },
-	//
-	//     render: function() {
-	//
-	//         console.log(this)
-	//
-	//         return (
-	//
-	//             <BarChartComponent values={this.state.data}/>
-	//
-	//         )
-	//     }
-	//
-	// })
-	
-	// var Button = React.createClass({
-	//
-	//     componentDidMount: function() {
-	//       $.ajax({
-	//         type: "GET",
-	//         url: this.props.url,
-	//         context: document.body,
-	//         success: function(data) {
-	//
-	//             this.setState({values: data});
-	//
-	//         }.bind(this),
-	//         fail: function() {
-	//           console.log("Operation failed");
-	//         }
-	//       });
-	//
-	//       console.log(this)
-	//     },
-	//
-	//     showGraph: function() {
-	//
-	//
-	//
-	//     },
-	//
-	//     render: function() {
-	//
-	//         return (
-	//             <button onClick={this.showGraph}> Show Graph </button>
-	//         )
-	//
-	//     }
-	//
-	// });
-	
-	// $.ajax({
-	//   type: "GET",
-	//   url: "http://localhost:5000/api/stats",
-	//   context: document.body,
-	//   success: function(data) {
-	//     console.log(data.values)
-	//   },
-	//   fail: function() {
-	//     console.log("Operation failed");
-	//   }
-	// })
-	
-	// var BarChartComponent = React.createClass({
-	//
-	//     rend: function() {
-	//         console.log("TEST")
-	//     },
-	//
-	//     render: function() {
-	//
-	//       console.log(this)
-	//
-	//         return (
-	//             <div>
-	//               <BarChart width={2000} height={300} fill={'#318'}
-	//                   title='Bar Chart' data={[this.props.data]}/>
-	//
-	//             <InputComponent placeholder="Input Search" text="Submit" test={this.rend}/>
-	//             </div>
-	//         )
-	//     }
-	//
-	// });
-	
 	var InputComponent = _react2.default.createClass({
 	    displayName: 'InputComponent',
 	
@@ -224,18 +75,11 @@
 	
 	        this.setState({ data: this.props.data });
 	
-	        setTimeout(function () {
-	
-	            console.log(this);
-	        }.bind(this), 3000);
-	
 	        return { data: this.props.data };
 	    },
 	
 	    componentDidMount: function componentDidMount() {
-	
 	        this.getInfo();
-	        console.log("hit");
 	    },
 	
 	    getInfo: function getInfo() {
@@ -246,11 +90,6 @@
 	                this.setState({ data: data });
 	            }.bind(this)
 	        });
-	
-	        setTimeout(function () {
-	
-	            console.log(this);
-	        }.bind(this), 1000);
 	    },
 	
 	    handleSubmit: function handleSubmit() {
@@ -268,10 +107,6 @@
 	                console.log("Operation failed");
 	            }
 	        });
-	
-	        setTimeout(function () {
-	            console.log(this);
-	        }.bind(this), 2000);
 	    },
 	
 	    handleTextInput: function handleTextInput(e) {
@@ -285,8 +120,8 @@
 	            'div',
 	            null,
 	            _react2.default.createElement(BarChart, { width: 2000, height: 300, fill: '#318',
-	                title: 'Bar Chart', data: [this.state.data] }),
-	            _react2.default.createElement('input', { className: 'btn', type: 'input', onChange: this.handleTextInput, placeholder: this.props.placeholder, text: this.props.text }),
+	                title: this.state.data.GEO_LABEL, data: [this.state.data] }),
+	            _react2.default.createElement('input', { className: 'btn text-input', type: 'input', onChange: this.handleTextInput, placeholder: this.props.placeholder, text: this.props.text }),
 	            _react2.default.createElement(
 	                'button',
 	                { className: 'btn btn-submit', type: 'submit', onClick: this.handleSubmit },
@@ -299,7 +134,7 @@
 	
 	var jsonData = {};
 	
-	var x = _jquery2.default.ajax({
+	_jquery2.default.ajax({
 	    url: "http://localhost:5000/api/stats/labels?label=Devon",
 	    type: "GET",
 	    success: function (data) {
@@ -313,8 +148,6 @@
 	setTimeout(function () {
 	    // console.log(jsonData)
 	}, 1000);
-	
-	console.log(x);
 	
 	setTimeout(function () {
 	    (0, _reactDom.render)(_react2.default.createElement(InputComponent, { placeholder: 'Input Search', text: 'Submit', data: jsonData }), document.getElementById('app'));

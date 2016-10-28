@@ -29,7 +29,6 @@ def get_labels():
     build_obj = []
 
     for x in range(0, 100):
-        print x
         # label = {"x": x, "y": json_obj[str(x)]}
         label = {"x": x, "y": json_obj[0][str(x)]}
 
@@ -55,7 +54,6 @@ def average_label_type():
     for x in data:
         if x['GEO_TYPE'] == geo_type:
             results.append(x)
-            print x
 
     for y in results:
 
@@ -67,19 +65,15 @@ def average_label_type():
         for x in range(0, 100):
             if x >= 0 and x < 25:
                 sum_25 += y[str(x)]
-                print x
 
             elif x >= 25 and x < 50:
                 sum_50 += y[str(x)]
-                print x
 
             elif x >=50 and x < 75:
                 sum_75 += y[str(x)]
-                print x
 
             else:
                 sum_100 += y[str(x)]
-                print x
 
         value = {
             'GEO_CODE': y['GEO_CODE'],
@@ -99,8 +93,6 @@ def average_label_type():
 def total_in_label():
     label = request.args.get('label')
     value = [x for x in data if x['GEO_LABEL'] == label]
-
-    print value
 
     sum = 0;
 

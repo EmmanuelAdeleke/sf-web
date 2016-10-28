@@ -1,0 +1,27 @@
+.rd3-chart-title {
+  font-size: 60px;
+  color: #3182bd;
+  text-align: center; }
+
+.rd3-chart {
+  display: block;
+  margin: 0 auto; }
+
+.btn-submit {
+  border: 1px solid #3182bd;
+  display: block;
+  color: #3182bd;
+  background: white;
+  font-size: 20px;
+  margin: 0 auto; }
+
+.text-input {
+  border: 1px solid #3182bd;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  border-radius: 0;
+  display: block;
+  background: white;
+  font-size: 20px;
+  margin: 0 auto 10px auto; }
