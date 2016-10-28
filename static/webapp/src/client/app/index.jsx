@@ -5,19 +5,6 @@ import rd3 from "react-d3";
 
 var BarChart = rd3.BarChart;
 
-var barData = [{
-    "values": [
-      { "x": 1, "y":  91},
-      { "x": 2, "y":  90},
-      { "x": 3, "y":  95},
-      { "x": 4, "y":  91},
-      { "x": 5, "y":  90},
-      { "x": 6, "y":  91},
-    ]
-  }
-
-];
-
 // var x = $.ajax({
 //     url: "http://localhost:5000/api/stats/labels?label=London",
 //     type: "GET",
@@ -145,26 +132,112 @@ var barData = [{
 //   }
 // })
 
-var BarChartComponent = React.createClass({
+// var BarChartComponent = React.createClass({
+//
+//     rend: function() {
+//         console.log("TEST")
+//     },
+//
+//     render: function() {
+//
+//       console.log(this)
+//
+//         return (
+//             <div>
+//               <BarChart width={2000} height={300} fill={'#318'}
+//                   title='Bar Chart' data={[this.props.data]}/>
+//
+//             <InputComponent placeholder="Input Search" text="Submit" test={this.rend}/>
+//             </div>
+//         )
+//     }
+//
+// });
+
+var InputComponent = React.createClass({
+
+    getInitialState: function() {
+
+        this.setState({data: this.props.data})
+
+        setTimeout(function() {
+
+          console.log(this)
+        }.bind(this), 3000)
+
+        return {data : this.props.data};
+    },
+
+    componentDidMount: function() {
+
+       this.getInfo();
+       console.log("hit")
+    },
+
+    getInfo:function(){
+       $.ajax({
+         url:"http://localhost:5000/api/stats/labels?label=United Kingdom",
+
+         success: function(data){
+            this.setState({ data : data });
+         }.bind(this)
+       });
+
+       setTimeout(function() {
+
+         console.log(this)
+       }.bind(this), 1000)
+
+     },
+
+    handleSubmit: function() {
+        console.log(this.state)
+
+          $.ajax({
+              url: "http://localhost:5000/api/stats/labels?label=" + this.state.input,
+              type: "GET",
+              success: function(data) {
+
+                  this.setState({data: data})
+                  console.log(data)
+
+              }.bind(this),
+              fail: function() {
+                  console.log("Operation failed")
+              }
+          });
+
+        setTimeout(function() {
+            console.log(this)
+        }.bind(this), 2000);
+
+    },
+
+    handleTextInput: function(e) {
+      this.setState({
+          input: e.target.value
+      })
+    },
 
     render: function() {
-
-      console.log(this)
-
-        return (
-            <div>
-              <BarChart width={2000} height={300} fill={'#318'}
-                  title='Bar Chart' data={[this.props.data]}/>
-            </div>
-        )
+        return(
+        <div>
+        <BarChart width={2000} height={300} fill={'#318'}
+            title='Bar Chart' data={[this.state.data]}/>
+            <input className="btn" type="input" onChange={this.handleTextInput} placeholder={this.props.placeholder} text={this.props.text}/>
+            <button className="btn btn-submit" type="submit" onClick={this.handleSubmit}>
+                {this.props.text}
+            </button>
+        </div>
+      )
     }
 
-})
+});
 
 var jsonData = {};
 
-$.ajax({
-    url: "http://localhost:5000/api/stats/labels?label=United Kingdom",
+var x = $.ajax({
+    url: "http://localhost:5000/api/stats/labels?label=Devon",
     type: "GET",
     success: function(data) {
         jsonData = data
@@ -175,10 +248,11 @@ $.ajax({
 });
 
 setTimeout(function() {
-    console.log(jsonData)
+    // console.log(jsonData)
 }, 1000)
 
+console.log(x)
 
 setTimeout(function() {
-    render(<BarChartComponent data={jsonData}/>, document.getElementById('app'));
-}, 1000)
+    render(<InputComponent placeholder="Input Search" text="Submit" data={jsonData}/>, document.getElementById('app'));
+}, 2000);

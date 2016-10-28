@@ -67,10 +67,6 @@
 	
 	var BarChart = _reactD2.default.BarChart;
 	
-	var barData = [{
-	    "values": [{ "x": 1, "y": 91 }, { "x": 2, "y": 90 }, { "x": 3, "y": 95 }, { "x": 4, "y": 91 }, { "x": 5, "y": 90 }, { "x": 6, "y": 91 }]
-	}];
-	
 	// var x = $.ajax({
 	//     url: "http://localhost:5000/api/stats/labels?label=London",
 	//     type: "GET",
@@ -198,19 +194,104 @@
 	//   }
 	// })
 	
-	var BarChartComponent = _react2.default.createClass({
-	    displayName: 'BarChartComponent',
+	// var BarChartComponent = React.createClass({
+	//
+	//     rend: function() {
+	//         console.log("TEST")
+	//     },
+	//
+	//     render: function() {
+	//
+	//       console.log(this)
+	//
+	//         return (
+	//             <div>
+	//               <BarChart width={2000} height={300} fill={'#318'}
+	//                   title='Bar Chart' data={[this.props.data]}/>
+	//
+	//             <InputComponent placeholder="Input Search" text="Submit" test={this.rend}/>
+	//             </div>
+	//         )
+	//     }
+	//
+	// });
 	
+	var InputComponent = _react2.default.createClass({
+	    displayName: 'InputComponent',
+	
+	
+	    getInitialState: function getInitialState() {
+	
+	        this.setState({ data: this.props.data });
+	
+	        setTimeout(function () {
+	
+	            console.log(this);
+	        }.bind(this), 3000);
+	
+	        return { data: this.props.data };
+	    },
+	
+	    componentDidMount: function componentDidMount() {
+	
+	        this.getInfo();
+	        console.log("hit");
+	    },
+	
+	    getInfo: function getInfo() {
+	        _jquery2.default.ajax({
+	            url: "http://localhost:5000/api/stats/labels?label=United Kingdom",
+	
+	            success: function (data) {
+	                this.setState({ data: data });
+	            }.bind(this)
+	        });
+	
+	        setTimeout(function () {
+	
+	            console.log(this);
+	        }.bind(this), 1000);
+	    },
+	
+	    handleSubmit: function handleSubmit() {
+	        console.log(this.state);
+	
+	        _jquery2.default.ajax({
+	            url: "http://localhost:5000/api/stats/labels?label=" + this.state.input,
+	            type: "GET",
+	            success: function (data) {
+	
+	                this.setState({ data: data });
+	                console.log(data);
+	            }.bind(this),
+	            fail: function fail() {
+	                console.log("Operation failed");
+	            }
+	        });
+	
+	        setTimeout(function () {
+	            console.log(this);
+	        }.bind(this), 2000);
+	    },
+	
+	    handleTextInput: function handleTextInput(e) {
+	        this.setState({
+	            input: e.target.value
+	        });
+	    },
 	
 	    render: function render() {
-	
-	        console.log(this);
-	
 	        return _react2.default.createElement(
 	            'div',
 	            null,
 	            _react2.default.createElement(BarChart, { width: 2000, height: 300, fill: '#318',
-	                title: 'Bar Chart', data: [this.props.data] })
+	                title: 'Bar Chart', data: [this.state.data] }),
+	            _react2.default.createElement('input', { className: 'btn', type: 'input', onChange: this.handleTextInput, placeholder: this.props.placeholder, text: this.props.text }),
+	            _react2.default.createElement(
+	                'button',
+	                { className: 'btn btn-submit', type: 'submit', onClick: this.handleSubmit },
+	                this.props.text
+	            )
 	        );
 	    }
 	
@@ -218,8 +299,8 @@
 	
 	var jsonData = {};
 	
-	_jquery2.default.ajax({
-	    url: "http://localhost:5000/api/stats/labels?label=United Kingdom",
+	var x = _jquery2.default.ajax({
+	    url: "http://localhost:5000/api/stats/labels?label=Devon",
 	    type: "GET",
 	    success: function (data) {
 	        jsonData = data;
@@ -230,12 +311,14 @@
 	});
 	
 	setTimeout(function () {
-	    console.log(jsonData);
+	    // console.log(jsonData)
 	}, 1000);
 	
+	console.log(x);
+	
 	setTimeout(function () {
-	    (0, _reactDom.render)(_react2.default.createElement(BarChartComponent, { data: jsonData }), document.getElementById('app'));
-	}, 1000);
+	    (0, _reactDom.render)(_react2.default.createElement(InputComponent, { placeholder: 'Input Search', text: 'Submit', data: jsonData }), document.getElementById('app'));
+	}, 2000);
 
 /***/ },
 /* 1 */

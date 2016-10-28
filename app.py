@@ -25,6 +25,7 @@ def get_countries():
 def get_labels():
     label = request.args.get('label')
     json_obj = [x for x in data if x['GEO_LABEL'] == label]
+
     build_obj = []
 
     for x in range(0, 100):
@@ -34,7 +35,14 @@ def get_labels():
 
         build_obj.append(label)
 
-    return jsonify({'values': build_obj})
+    container_obj = {
+        'GEO_CODE': json_obj[0]['GEO_CODE'],
+        'GEO_LABEL': json_obj[0]['GEO_LABEL'],
+        'GEO_TYPE': json_obj[0]['GEO_TYPE'],
+        'values': build_obj
+    }
+
+    return jsonify(container_obj)
 
 @app.route('/api/stats/averageByLabel', methods=['GET'])
 def average_label_type():
